@@ -1,0 +1,93 @@
+package mazepack;
+
+public class Minotaur {
+	
+	private Map map;
+	private Location loc;
+	private Location spawn;
+	//A constructor that gives the minotaur a location and map and spawn.
+	public Minotaur(Map map, Location loc, Location spawn) {
+		this.map = map;
+		this.loc = loc;
+		this.spawn = spawn;
+	}
+	//These are setter and returner methods to set locations
+	public void setLoc(Location l) {loc = l;}
+	public void setSpawn(Location l) {spawn = l;}
+	public Location getLoc() {return loc;}
+	public Location getmSpawn() {return spawn;}
+	
+  //A boolean method that checks if the move is valid, if it isnt then the minotaur finds a new valid move.
+	public boolean isValid(String i) {
+		boolean[][] arr = map.getArr();
+		boolean b = true;
+		int r = loc.getRow();
+		int c = loc.getCol();
+		if(i.toLowerCase().equals("w")){
+			if(r == 0) {
+				b = false;
+			}
+			else if(!arr[r-1][c]) {
+				b = false;
+			}
+		}
+		else if(i.toLowerCase().equals("a")){
+			if(c == 0) {
+				b = false;
+			}
+			else if(!arr[r][c-1]) {
+				b = false;
+			}
+		}
+		else if(i.toLowerCase().equals("s")){
+			if(r == (arr.length - 1)) {
+				b = false;
+			}
+			else if(!arr[r+1][c]) {
+				b = false;
+			}
+		}
+		else if(i.toLowerCase().equals("d")){
+			if(c == (arr[r].length - 1)) {
+				b = false;
+			}
+			else if(!arr[r][c+1]) {
+				b = false;
+			}
+		}
+		else if(r < 0 && c < 0) {
+			b = false;
+		}
+		return b;
+	}
+	//A method which moves the minotaur, as well as checking if it is a valid move.
+	public void move(Maze m, Player p) {
+		int prow = p.getLoc().getRow();
+		int pcol = p.getLoc().getCol();
+		int mrow = m.getm1Loc().getRow();
+		int mcol = m.getm1Loc().getCol();
+		double oldDist = Math.sqrt(Math.pow(pcol - mcol, 2) + Math.pow(prow - mrow, 2));
+		double upDist = Math.sqrt(Math.pow(pcol - mcol, 2) + Math.pow(Math.abs(prow - (mrow - 1)), 2));
+		double downDist = Math.sqrt(Math.pow(pcol - mcol, 2) + Math.pow(Math.abs(prow - (mrow + 1)), 2));
+		double rightDist = Math.sqrt(Math.pow(Math.abs(pcol - (mcol + 1)), 2) + Math.pow(prow - mrow, 2));
+		double leftDist = Math.sqrt(Math.pow(Math.abs(pcol - (mcol - 1)), 2) + Math.pow(prow - mrow, 2));
+		if(loc.getRow() >= 0 && loc.getCol() >= 0) {
+			if(upDist < oldDist && isValid("w")) {
+				loc.setRow(mrow - 1);
+				return;
+			}
+			if(downDist < oldDist && isValid("s")) {
+				loc.setRow(mrow + 1);
+				return;
+			}
+			if(rightDist < oldDist && isValid("d")) {
+				loc.setCol(mcol + 1);
+				return;
+			}
+			if(leftDist < oldDist && isValid("a")) {
+				loc.setCol(mcol - 1);
+				return;
+			}
+		}
+	}
+}
