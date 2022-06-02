@@ -1,0 +1,33 @@
+package mazepack;
+
+import javax.swing.JOptionPane;
+
+public class Trap {
+
+	private Map map;
+	private Location loc;
+	//A constructor which gives the trap a location.
+	public Trap(Map map, Location loc) {
+		this.map = map;
+		this.loc = loc;
+	}
+	//Getter and setter methods.
+	public Location getLoc() {return loc;}
+	public void setLoc(Location l) {loc = l;}
+	//A method to kill the player if the player walks over it.
+	public void kill(Maze m, Player p, GameControl o) {
+		if(p.getLoc().getRow() == loc.getRow() && p.getLoc().getCol() == loc.getCol()) {
+			JOptionPane.showMessageDialog(null, "Trapped");
+			if(o.getCurMap().equals(Map.MAP1)) {
+				toSpawn(m, p);
+			}
+		}
+	}
+	//A method to spawn the trap.
+	public void toSpawn(Maze m, Player p) {
+		p.setLoc(m.getStart());
+		m.setpLoc(m.getStart());
+		loc.setRow(-1);
+		loc.setCol(-1);
+	}
+}
