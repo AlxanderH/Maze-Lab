@@ -1,0 +1,52 @@
+package mazepack;
+//This is an enum class that will be used to construct the map that the user sees.
+public enum Map {
+	MAP1(new boolean[][] {
+		{true, true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true, true},
+		{true, true, true, false, false, true, true, true, true, true},
+		{true, true, true, false, false, true, true, false, true, true},
+		{true, true, true, true, true, true, false, false, true, true},
+		{true, true, true, true, true, false, false, false, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+	}),
+	MAP2(new boolean[][] {
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, false, false, true, true, false, true, true},
+		{true, true, true, false, false, true, true, false, true, true},
+		{true, true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, true, true, true, true, false, true, true},
+	}),
+	MAP3(new boolean[][] {
+		{true, true, true, true, true, true, true, true, false, true},
+		{true, true, true, true, true, true, true, false, true, true},
+		{true, true, true, true, true, true, false, true, true, true},
+		{true, true, true, true, true, true, false, true, true, true},
+		{true, true, true, false, false, true, true, true, true, true},
+		{true, true, true, false, false, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true, true},
+		{true, true, true, false, false, true, true, true, true, true},
+		{true, true, false, true, true, true, true, true, true, true},
+		{true, false, true, true, true, true, true, true, true, true},
+	});
+	
+	private boolean[][] map;
+	//A setter that will renew the map.
+	private Map(boolean[][] map) {
+		this.map = map;
+	}
+	
+	public boolean[][] getArr() {return map;}
+	
+}
