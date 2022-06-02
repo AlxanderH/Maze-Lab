@@ -1,0 +1,43 @@
+package mazepack;
+import javax.swing.JOptionPane;
+
+public class Main {
+	//The main method is what starts up the game, creating new constuctors and calling other classes.
+	public static void main(String[] args) {
+		GameControl o = new GameControl();
+		JOptionPane.showMessageDialog(null, "Set your name as Rico to enable cheats.");
+		o.createName();
+		if(o.getName().equals("Rico")) {
+			o.setCurMap(Map.MAP3);
+		}
+		else {
+			o.setCurMap(Map.MAP1);
+		}
+		o.runMap(o.getCurMap());
+		while(!o.getStatus().equals("gameover")) {
+			if(o.getStatus().equals("win")) {
+				if(o.getCurMap().equals(Map.MAP1)) {
+					o.setCurMap(Map.MAP2);
+				}
+				else if(o.getCurMap().equals(Map.MAP2)) {
+					o.setCurMap(Map.MAP3);
+				}
+				o.getPlayer().setHasKey(false);
+				o.getPlayer().setHasSword(false);
+				o.setStatus("none");
+				o.runMap(o.getCurMap());
+			}
+			if(o.getStatus().equals("trapped")) {
+				if(o.getCurMap().equals(Map.MAP2)) {
+					o.setCurMap(Map.MAP1);
+				}
+				else if(o.getCurMap().equals(Map.MAP3)) {
+					o.setCurMap(Map.MAP2);
+				}
+				o.getPlayer().setHasKey(false);
+				o.getPlayer().setHasSword(false);
+				o.runMap(o.getCurMap());
+			}
+		}
+	}
+}
