@@ -1,0 +1,129 @@
+package mazepack;
+import javax.swing.JOptionPane;
+
+public class Player {
+	private Map map;
+	private Location loc;
+	private String name;
+	private boolean hasSword; //false by default
+	private boolean hasKey;
+	private boolean isDead; //false by default
+	
+  //A constructor that instantiates the location of the player, as well as whether they have a sword to use.
+	public Player(Map map, Location loc, String name, boolean hasSword, boolean hasKey, boolean isDead) {
+		this.map = map;
+		this.loc = loc;
+		this.name = name;
+		this.hasSword = hasSword;
+		this.hasKey = hasKey;
+		this.isDead = isDead;
+	}
+	//Getter methods
+	public Location getLoc() {return loc;}
+	public String getName() {return name;}
+	public boolean getHasSword() {return hasSword;}
+	public boolean getHasKey() {return hasKey;}
+	public boolean getIsDead() {return isDead;}
+	
+  //Setter methods.
+	public void setLoc(Location l) {loc = l;}
+	public void setName(String n) {name = n;}
+	public void setHasSword(boolean b) {hasSword = b;}
+	public void setHasKey(boolean b) {hasKey = b;}
+	public void setIsDead(boolean b) {isDead = b;}
+	public void setMap(Map m) {map = m;}
+	//This method checks whether the move is valid.
+	public boolean isValid(String i) {
+		boolean[][] arr = map.getArr();
+		boolean b = true;
+		int r = loc.getRow();
+		int c = loc.getCol();
+		if(i.toLowerCase().equals("w")){
+			if(r == 0) {
+				b = false;
+			}
+			else if(!arr[r-1][c]) {
+				b = false;
+			}
+		}
+		else if(i.toLowerCase().equals("a")){
+			if(c == 0) {
+				b = false;
+			}
+			else if(!arr[r][c-1]) {
+				b = false;
+			}
+		}
+		else if(i.toLowerCase().equals("s")){
+			if(r == arr.length - 1) {
+				b = false;
+			}
+			else if(!arr[r+1][c]) {
+				b = false;
+			}
+		}
+		else if(i.toLowerCase().equals("d")){
+			if(c == arr[r].length - 1) {
+				b = false;
+			}
+			else if(!arr[r][c+1]) {
+				b = false;
+			}
+		}
+		return b;
+	}
+	//A method that moves the player over one grid square.
+	public void move() { 
+		String i = JOptionPane.showInputDialog("Move");
+		int r = loc.getRow();
+		int c = loc.getCol();
+		if(i.toLowerCase().equals("w") && isValid(i)) {
+			loc.setRow(r - 1);
+		}
+		else if(i.toLowerCase().equals("a") && isValid(i)) {
+			loc.setCol(c - 1);
+		}
+		else if(i.toLowerCase().equals("s") && isValid(i)) {
+			loc.setRow(r + 1);
+		}
+		else if(i.toLowerCase().equals("d") && isValid(i)) {
+			loc.setCol(c + 1);
+		}
+	}
+  //A method to give the player a sword when they walk over it.
+	public void takeSword(Sword s) {
+		if(loc.getRow() == s.getLoc().getRow() && loc.getCol() == s.getLoc().getCol()) {
+			//takes the sword off the map
+			hasSword = true;
+			Location nullLoc = new Location(-1, -1);
+			s.setLoc(nullLoc);
+		}
+	}
+	//A method to give the player a key when they walk over it.
+	public void takeKey(Key k) {
+		if(loc.getRow() == k.getLoc().getRow() && loc.getCol() == k.getLoc().getCol()) {
+			hasKey = true;
+			Location nullLoc = new Location(-1, -1);
+			k.setLoc(nullLoc);
+		}
+	}
+	//Method that kills the minotaur if the player has a sword.
+	public void minotaurFight(Maze m) {
+		if(m.getpLoc().getRow() == m.getm1Loc().getRow() && m.getpLoc().getCol() == m.getm1Loc().getCol()) {
+			if(!hasSword) {
+				isDead = true;
+			}
+			else {
+				kill(m);
+			}
+		}
+	}
+	//Method that kills the player if they do not have a sword.
+	public void kill(Maze m) {
+		m.setm1Loc(m.getm1spawn());
+		if(!name.equals("Rico")) {
+			JOptionPane.showMessageDialog(null, "Your sword broke!");
+			hasSword = false;
+		}
+	}
+}
