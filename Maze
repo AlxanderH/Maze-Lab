@@ -1,0 +1,190 @@
+package mazepack;
+import javax.swing.JOptionPane;
+
+public class Maze {
+	
+	private Map map;
+	
+	//locations for each object, will be updated as locations change and stored here
+	private Location start;
+	private Location end;
+	private Location pLoc;
+	private Location m1Loc;
+	private Location swordLoc;
+	private Location trap1Loc;
+	private Location m1spawn;
+	private Location keyLoc;
+	
+	//strings to draw the map and objects
+	private String wall = "▨";
+	private String path = "▢";
+	private String player = "P";
+	private String swordedPlayer = "PP";
+	private String minotaur = "☠";
+	private String sword = "⚔";
+	private String bomb = "💣︎";
+	private String key = "⚿";
+	private String door =  "🚪 ";
+	//This method instantiates every variable so that they are usable in the class.
+	public Maze(Map map, Location start, Location end, Location min1Loc, Location min1, Location swordLoc, Location trap1Loc, Location keyLoc) {
+		this.map = map;
+		this.start = start;
+		this.pLoc = start;
+		this.end = end;
+		this.m1Loc = min1Loc;
+		this.m1spawn = min1;
+		this.swordLoc = swordLoc;
+		this.trap1Loc = trap1Loc;
+		this.keyLoc = keyLoc;
+	}
+	//A bunch of return statements that give locations of objects.
+	public Location getStart() {return start;}
+	public Location getEnd() {return end;}
+	public Location getpLoc() {return pLoc;}
+	public Location getm1Loc() {return m1Loc;}
+	public Location getm1spawn() {return m1spawn;}
+	public Location getswordLoc() {return swordLoc;}
+	public Location gett1Loc() {return trap1Loc;}
+	public Location getKeyLoc() {return keyLoc;}
+	//A bunch of setter methods that set objects.
+	public void setStart(Location l) {start = l;}
+	public void setEnd(Location l) {end = l;}
+	public void setpLoc(Location l) {pLoc = l;}
+	public void setm1Loc(Location l) {m1Loc = l;}
+	public void setm1spawn(Location l) {m1spawn = l;}
+	public void setswordLoc(Location l) {swordLoc = l;}
+	public void sett1Loc(Location l) {trap1Loc = l;}
+	public void setKeyLoc(Location l) {keyLoc = l;}
+	public void setMap(Map m) {map = m;}
+	//Level 1 of the game, gives the locations of all the objects ini level 1.
+	public void setStarts(Map map) {
+		if(map == Map.MAP1) {
+			start = new Location(0, 1);
+			pLoc = new Location(0, 1);
+			end = new Location(10, 0);
+			m1spawn = new Location(0, 8);
+			m1Loc = new Location(0, 8);
+			swordLoc = new Location(1, 2);
+			trap1Loc = new Location(2, 1);
+			keyLoc = new Location(3, 1);
+		}
+    //Level 2 of the game, gives the locations of all the objects in level 2.
+		if(map == Map.MAP2) {
+			start = new Location(0, 2);
+			pLoc = new Location(0, 2);
+			end = new Location(10, 0);
+			m1spawn = new Location(10, 0);
+			m1Loc = new Location(10, 0);
+			swordLoc = new Location(2, 5);
+			trap1Loc = new Location(2, 6);
+			keyLoc = new Location(1, 1);
+		}
+    //Level 3 of the game, gives the locations of all the objects in level 3.
+		if(map == Map.MAP3) {
+			start = new Location(0, 1);
+			pLoc = new Location(0, 1);
+			end = new Location(10, 0);
+			m1spawn = new Location(10, 0);
+			m1Loc = new Location(10, 0);
+			swordLoc = new Location(3, 1);
+			trap1Loc = new Location(6, 8);
+			keyLoc = new Location(7, 2);
+		}
+	}
+	
+  //A method that creates the map by getting the position of every object.
+	public String[][] drawMaze(Map map, Player p) { 
+		boolean[][] arrMap = map.getArr();
+		String[][] maze = new String[arrMap.length][arrMap[0].length];
+		for(int r = 0; r<arrMap.length; r++) {
+			for(int c=0; c<arrMap[r].length; c++) {
+				if(r == pLoc.getRow() && c == pLoc.getCol() && r == m1Loc.getRow() && c == m1Loc.getCol() && r >= 0 && c >= 0) {
+					if(p.getHasSword()) {
+						maze[r][c] = swordedPlayer;
+					}
+					else if(!p.getIsDead()){
+						maze[r][c] = player;
+					}
+					else {
+						maze[r][c] = minotaur;
+					}
+					//m1Loc = m1spawn;
+				}
+				else if(r == pLoc.getRow() && c == pLoc.getCol() && r == trap1Loc.getRow() && c == trap1Loc.getCol() && r >= 0 && c >= 0) {
+					if(p.getHasSword()) {
+						maze[r][c] = swordedPlayer;
+					}
+					else {
+						maze[r][c] = player;
+					}
+				}
+				else if(r == pLoc.getRow() && c == pLoc.getCol() && r == keyLoc.getRow() && c == keyLoc.getCol() && r >= 0 && c >= 0) {
+					if(p.getHasSword()) {
+						maze[r][c] = swordedPlayer;
+					}
+					else {
+						maze[r][c] = player;
+					}
+				}
+				else if(r == pLoc.getRow() && c == pLoc.getCol() && !p.getHasSword()) {
+					maze[r][c] = player;
+				}
+				else if(r == pLoc.getRow() && c == pLoc.getCol() && p.getHasSword()) {
+					maze[r][c] = swordedPlayer;
+				}
+				else if(r == m1Loc.getRow() && c == m1Loc.getCol() && r >= 0 && c >= 0) {
+					maze[r][c] = minotaur;
+				}
+				else if(r == swordLoc.getRow() && c == swordLoc.getCol() && r >= 0 && c >= 0) {
+					maze[r][c] = sword;
+				}
+				else if(r == trap1Loc.getRow() && c == trap1Loc.getCol() && r >= 0 && c >= 0) {
+					maze[r][c] = bomb;
+				}
+				else if(r == keyLoc.getRow() && c == keyLoc.getCol() && r >= 0 && c >= 0) {
+					maze[r][c] = key;
+				}
+				else if(r == end.getRow() && c == end.getCol() && r >=0 && c >=0) {
+					maze[r][c] = door;
+				}
+				else if(arrMap[r][c]) {
+					maze[r][c] = path;
+				}
+				else {
+					maze[r][c] = wall;
+				}
+			}
+		}
+		return maze;
+	}
+	//This is a method that converts the method into a string so that it is visible to the user.
+	public String mazeToString(String[][] maze) {
+		String ret = "";
+		for(int r = 0; r<maze.length; r++) {
+			for(int c = 0; c<maze[r].length; c++) {
+				ret += maze[r][c];
+			}
+			ret += "\n";
+		}
+		return ret;
+	}
+	//This is a method that ends the game for the player.
+	public String getGameEnd(Player p) {
+		if(pLoc.getRow() == end.getRow() && pLoc.getCol() == end.getCol() && p.getHasKey()) {
+			JOptionPane.showMessageDialog(null, "You beat this level " + p.getName() + "!");
+			if(map.equals(Map.MAP3)) {
+				return "You lost";
+			}
+			return "You won!!";
+		}
+		else if(pLoc.getRow() == trap1Loc.getRow() && pLoc.getCol() == trap1Loc.getCol() && !map.equals(Map.MAP1)) {
+			return "trapped";
+		}
+		else if(p.getIsDead()) {
+			JOptionPane.showMessageDialog(null, "You died!");
+			return "gameover";
+		}
+		return "none";
+	}
+	
+}
