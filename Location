@@ -1,0 +1,24 @@
+package mazepack;
+
+//This class was made to have an active location that can be referred to in the constructor class.
+public class Location {
+	
+	private int row;
+	private int col;
+	//A constructor that will instantiate the row and column to get a posititon on the map.
+	public Location(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
+	//Return methods that will give you the row and columns when called.
+	public int getRow() {return row;}
+	public int getCol() {return col;}
+	//Setter methods that will set rows and columns for position changes in objects.
+	public void setRow(int r) {row = r;}
+	public void setCol(int c) {col = c;}
+	
+  //A method to return the position of the object as a string.
+	public String toString() {
+		return row + ", " + col;
+	}
+}
