@@ -1,0 +1,16 @@
+package mazepack;
+
+public class Sword {
+	
+	private Map map;
+	private Location loc;
+	//A constructor to give the sword a location.
+	public Sword(Map map, Location loc) {
+		this.map = map;
+		this.loc = loc;
+	}
+	//Return and setter methods for locations.
+	public Location getLoc() {return loc;}
+	public void setLoc(Location l) {loc = l;}
+		
+}
