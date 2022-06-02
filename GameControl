@@ -1,0 +1,78 @@
+package mazepack;
+import javax.swing.JOptionPane;
+
+//This is the controller class that will create the map and visuals for the player.
+public class GameControl {
+
+	private String status = "none";
+	private String name;
+	private Map curMap;
+	private Maze m = new Maze(null, null, null, null, null, null, null, null);
+	private Player p = new Player(null, null, null, false, false, false);
+	private Location trapLocation;
+	
+	public String getStatus() {return status;}
+	public String getName() {return name;}
+	public Map getCurMap() {return curMap;}
+	public Maze getMaze() {return m;}
+	public Player getPlayer() {return p;}
+	
+	public void setStatus(String s) {status = s;}
+	public void setName(String s) {name = s;}
+	public void setCurMap(Map m) {curMap = m;}
+	
+  //A method to take an inputted name and make it the players name in-game.
+	public void createName() {
+		name = JOptionPane.showInputDialog(null, "Choose your name");
+	}
+	
+	public GameControl() {}	
+	//This method will create the map and place everything on the map.
+	public void runMap(Map map) {
+		m.setMap(map);
+		p.setMap(map);
+		p.setName(name);
+		Sword s = new Sword(map, null);
+		Minotaur m1 = new Minotaur(map, null, null);
+		Trap t1 = new Trap(map, null);
+		Key key = new Key(map, null);
+		m.setStarts(map);
+		if(status == "trapped"){
+			this.getPlayer().setLoc(trapLocation);
+			this.getMaze().setpLoc(trapLocation);
+			this.setStatus("none");
+		}
+		p.setLoc(m.getpLoc()); //sets locations of player, minotaurs, sword, traps in maze class, can be changed there
+		m1.setLoc(m.getm1Loc());
+		m1.setSpawn(m.getm1spawn());
+		s.setLoc(m.getswordLoc());
+		t1.setLoc(m.gett1Loc());
+		key.setLoc(m.getKeyLoc());
+		trapLocation = t1.getLoc();
+		String maze = m.mazeToString(m.drawMaze(map, p));
+		JOptionPane.showMessageDialog(null, maze);
+		while(status.equals("none")) {
+			//moves player, updates location in maze class
+			p.move();
+			m.setpLoc(p.getLoc());
+			//checks if a sword is there, takes sword if it is and updates its location in maze
+			p.takeSword(s);
+			p.takeKey(key);
+			m.setswordLoc(s.getLoc());
+			m.setKeyLoc(key.getLoc());
+			t1.kill(m, p, this);
+			m.sett1Loc(t1.getLoc());
+			p.minotaurFight(m);
+			maze = m.mazeToString(m.drawMaze(map, p));
+			JOptionPane.showMessageDialog(null, maze);
+			m1.move(m, p);
+			m.setm1Loc(m1.getLoc());
+			p.minotaurFight(m);
+			maze = m.mazeToString(m.drawMaze(map, p));
+			System.out.println(m.getm1Loc());
+			System.out.println(m.getm1spawn());
+			JOptionPane.showMessageDialog(null, maze);
+			status = m.getGameEnd(p);
+		}	
+	}
+}
